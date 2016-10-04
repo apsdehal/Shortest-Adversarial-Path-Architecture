@@ -33,11 +33,11 @@ ConnectionHandler.prototype.handleConnections = function (sock, cb) {
 ConnectionHandler.prototype.sendFile = function(data) {
   this.playerOneSock.write(data + '#\n');
   this.playerTwoSock.write(data + '#\n');
-}
+};
 
 ConnectionHandler.prototype.startConversation = function(gameManager) {
   this.playerOneSock.on('data', function(data) {
-    var hasEnded = gameManager.firstPlayerMove(data);
+    var hasEnded = gameManager.playerOneMove(data);
 
     if (hasEnded) {
       this.endConnections();
@@ -45,6 +45,26 @@ ConnectionHandler.prototype.startConversation = function(gameManager) {
   })
 
   this.playerTwoSock.on('data', function(data) {
-    
+    gameManager.playerTwoMove(data);
   });
-}
+};
+
+ConnectionHandler.prototype.notifyPlayerOne = function(data) {
+  this.playerOneSock.write(data);
+};
+
+ConnectionHandler.prototype.notifyPlayerTwo = function(data) {
+  this.playerTwoSock.write(data);
+};
+
+ConnectionHandler.prototype.endConnections = function () {
+  this.reset();
+};
+
+ConnectionHandler.prototype.reset = function () {
+  this.playerOneSock = null;
+  this.playerTwoSock = null;
+  this.playerOneActive = false;
+  this.playerTwoActive = false;
+  this.gameActive = false;
+};

@@ -14,17 +14,25 @@ function EdgeWithoutCost(x, y) {
 function Graph() {
   this.edges = [];
   this.edgeNumber = {};
+  this.adjancencyList = {};
 }
 
 Graph.prototype.addEdge = function(x, y) {
   this.edgeNumber[(new EdgeWithoutCost(x, y))] = this.edges.length;
   this.edges.push(new Edge(x, y, 1));
+  this.adjacencyList[x] = this.adjacencyList[x].length ? this.adjacencyList[x].push(y) : [y];
+  this.adjacencyList[y] = this.adjacencyList[y].length ? this.adjacencyList[y].push(x) : [x];
 }
 
 Graph.prototype.doubleCost = function(x, y) {
   var edgeNo = this.getEdgeNumber(x, y);
   this.edges[edgeNo].cost *= 2;
 }
+
+Graph.prototype.getEdgeCost = function (x, y) {
+  // We assume validity has been checked already
+  return this.edges[this.getEdgeNumber(x, y)].cost;
+};
 
 Graph.prototype.getEdgeNumber = function(x, y) {
   var edge = new EdgeWithoutCost(x, y);
@@ -41,4 +49,8 @@ Graph.prototype.getEdgeNumber = function(x, y) {
 
   delete edge, reverseEdge;
   return edge;
+}
+
+Graph.prototype.validEdge = function(x, y) {
+  return this.adjacencyList[x].includes(y);
 }
