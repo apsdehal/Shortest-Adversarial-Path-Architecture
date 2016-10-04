@@ -5,7 +5,6 @@ var argv = require('minimist')(process.argv.slice(2));
 
 function FileReader() {
   this.data;
-  this.readFile();
 }
 
 FileReader.prototype.readFile = function (filename) {
@@ -16,5 +15,5 @@ FileReader.prototype.readFile = function (filename) {
         filename = argv.f;
       }
   }
-  this.data = fs.readFileSync(filename);
+  this.data = fs.readFileSync(filename).toString();
 };

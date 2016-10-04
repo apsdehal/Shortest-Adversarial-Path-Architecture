@@ -1,11 +1,16 @@
 var net = require('net');
 var connectionHandler = require('./connection-handler');
-var gameDataManager = require('./game-data-manager');
+var gameManager = require('./game-manager');
 var fileReader = require('./file-reader');
 
-// Initial data passed to GameData class
-gameData.initializeGame(fileReader.data);
+fileReader.readFile();
 
-net.createServer(connectionHandler.handleConnections).listen(5000);
+// Initial data passed to GameData class
+gameManager.initializeGame(fileReader.data);
+
+net.createServer(function (sock) {
+  connectionHandler.handleConnections(sock, gameManager.startInteraction.bind(gameManager));
+}).listen(5000);
 
 console.log('Server started');
+console.log('Waiting for player 1');
