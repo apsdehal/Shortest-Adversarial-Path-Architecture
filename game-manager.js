@@ -16,26 +16,39 @@ GameManager.prototype.startInteraction = function(connHandler) {
   connHandler.startConversation(self);
 }
 
-GameManager.prototype.playerOneMove = function(y) {
+GameManager.prototype.playerOneMove = function(y, connHandler) {
   y = y.trim();
 
-  if (!this.validateMove(data, 1)) {
-      return 2;
+  if (!this.validateMove(y, 1)) {
+    this.notifyEndGame(connHandler);
+    return 2;
   }
 
-  return this.gameData.setPlayerOnePosition(y);
+  var result = this.gameData.setPlayerOnePosition(y);
+
+  if (!result) {
+    connHandler.notifyPlayerTwo(y);
+  } else {
+    this.notifyEndGame(connHandler);
+  }
+
+  return result;
 };
 
-GameManager.prototype.playerTwoMove = function(data) {
+GameManager.prototype.playerTwoMove = function(data, connHandler) {
   data = data.split(' ').map(function (x) {
     return x.trim();
   });
 
   if (!this.validateMove(data, 2)) {
-      return 2;
+    this.notifyEndGame(connHandler);
+    return 2;
   }
 
-  return this.gameData.doubleEdgeCost(data[0], data[1]);
+  data.push(this.gameData.doubleEdgeCost(data[0], data[1]));
+
+  connHandler.notifyPlayerOne(data.join(' '));
+  return 0;
 }
 
 GameManager.prototype.validateMove = function (data, player) {
@@ -44,4 +57,9 @@ GameManager.prototype.validateMove = function (data, player) {
   } else {
     return this.gameData.validateMove(data[0], data[1]);
   }
+};
+
+GameManager.prototype.notifyEndGame = function (connHandler) {
+  this.gameData.showFinalCost();
+  connHandler.notifyGameEnd();
 };

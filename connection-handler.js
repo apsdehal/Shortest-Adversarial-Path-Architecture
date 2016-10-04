@@ -36,16 +36,17 @@ ConnectionHandler.prototype.sendFile = function(data) {
 };
 
 ConnectionHandler.prototype.startConversation = function(gameManager) {
+  var self = this;
   this.playerOneSock.on('data', function(data) {
-    var hasEnded = gameManager.playerOneMove(data);
+    var hasEnded = gameManager.playerOneMove(data.toString(), self);
 
     if (hasEnded) {
-      this.endConnections();
+      self.endConnections();
     }
   })
 
   this.playerTwoSock.on('data', function(data) {
-    gameManager.playerTwoMove(data);
+    gameManager.playerTwoMove(data.toString(), self);
   });
 };
 
@@ -61,10 +62,16 @@ ConnectionHandler.prototype.endConnections = function () {
   this.reset();
 };
 
+ConnectionHandler.prototype.notifyGameEnd = function() {
+    this.notifyPlayerOne('$');
+    this.notifyPlayerTwo('$');
+}
+
 ConnectionHandler.prototype.reset = function () {
   this.playerOneSock = null;
   this.playerTwoSock = null;
   this.playerOneActive = false;
   this.playerTwoActive = false;
   this.gameActive = false;
+  console.log('Waiting for player 1');
 };

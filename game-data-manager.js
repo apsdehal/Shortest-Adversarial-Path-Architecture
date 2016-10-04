@@ -27,8 +27,11 @@ GameDataManager.prototype.initialize = function (data) {
 
   var curr;
   for(var i = 0; i < data.length; i++) {
+    if (!data[i]) {
+      continue;
+    }
     curr = data[i].split(' ');
-    this.graph.addEdge(curr[0], curr[1]);
+    this.graph.addEdge(curr[0].trim(), curr[1].trim());
   }
 
   GameDataManager.prototype.setPlayerOnePosition = function(y) {
@@ -43,7 +46,7 @@ GameDataManager.prototype.initialize = function (data) {
   };
 
   GameDataManager.prototype.doubleEdgeCost = function (x, y) {
-    this.graph.doubleCost(x, y);
+    return this.graph.doubleCost(x, y);
   };
 
   GameDataManager.prototype.addBill = function(y) {
@@ -62,4 +65,8 @@ GameDataManager.prototype.initialize = function (data) {
     }
     return this.graph.validEdge(x, y);
   };
+
+  GameDataManager.prototype.showFinalCost = function () {
+    console.log("Final cost of Player 1 is", this.playerBill);
+  }
 }
