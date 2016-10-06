@@ -22,6 +22,7 @@ GameDataManager.prototype.initialize = function (data) {
   this.startPoint = startPoint;
   this.endPoint = endPoint;
   this.playerOnePosition = this.startPoint;
+  this.playerBill = 0;
 
   data.splice(0, 3);
 
@@ -45,6 +46,10 @@ GameDataManager.prototype.initialize = function (data) {
     }
   };
 
+  GameDataManager.prototype.getPlayerOnePosition = function() {
+    return this.playerOnePosition;
+  }
+
   GameDataManager.prototype.doubleEdgeCost = function (x, y) {
     return this.graph.doubleCost(x, y);
   };
@@ -56,6 +61,7 @@ GameDataManager.prototype.initialize = function (data) {
   GameDataManager.prototype.reset = function () {
     this.playerOnePosition = this.startPoint;
     this.playerBill = 0;
+    this.initialize(this.originalData);
   };
 
   GameDataManager.prototype.validateMove = function (x, y) {

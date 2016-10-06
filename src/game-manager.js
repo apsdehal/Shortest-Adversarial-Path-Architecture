@@ -17,11 +17,16 @@ GameManager.prototype.startInteraction = function(connHandler) {
 }
 
 GameManager.prototype.playerOneMove = function(y, connHandler) {
-  y = y.trim();
+  y = y.split(' ').map(function (x) {
+    // Checking for safety
+    return x.trim();
+  });
+
+  y = y[0];
 
   if (!this.validateMove(y, 1)) {
-    this.notifyEndGame(connHandler);
-    return 2;
+    connHandler.notifyPlayerTwo(this.gameData.getPlayerOnePosition());
+    return false;
   }
 
   var result = this.gameData.setPlayerOnePosition(y);
@@ -41,8 +46,8 @@ GameManager.prototype.playerTwoMove = function(data, connHandler) {
   });
 
   if (!this.validateMove(data, 2)) {
-    this.notifyEndGame(connHandler);
-    return 2;
+    connHandler.notifyPlayerOne('-1 -1 -1');
+    return false;
   }
 
   data.push(this.gameData.doubleEdgeCost(data[0], data[1]));
@@ -55,11 +60,15 @@ GameManager.prototype.validateMove = function (data, player) {
   if (player === 1) {
     return this.gameData.validateMove(data)
   } else {
+    if (data.length !== 2) {
+      return false;
+    }
     return this.gameData.validateMove(data[0], data[1]);
   }
 };
 
 GameManager.prototype.notifyEndGame = function (connHandler) {
   this.gameData.showFinalCost();
+  this.gameData.reset();
   connHandler.notifyGameEnd();
 };
