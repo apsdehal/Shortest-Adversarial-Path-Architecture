@@ -1,7 +1,7 @@
 var net = require('net');
-var connectionHandler = require('./connection-handler');
-var gameManager = require('./game-manager');
-var fileReader = require('./file-reader');
+var connectionHandler = require('./src/connection-handler');
+var gameManager = require('./src/game-manager');
+var fileReader = require('./src/file-reader');
 
 fileReader.readFile();
 
