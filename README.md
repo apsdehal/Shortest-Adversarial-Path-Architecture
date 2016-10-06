@@ -72,6 +72,10 @@ Game's end is specified via a delimiter `$`. If at any point you receive it, you
 
 You can check the test clients in [test-clients](test-clients/) folder.
 
-**Note**: Architecture is a work in progress and will be thorougly tested and fully completed by the night of competition.
+**Note**: Architecture is a work in progress and will be thorougly tested and completed by the night of competition.
 
 If you find any issues, please feel free to open them using Github issues.
+
+## Sending the code
+
+Your code should be organized in folder which should contain two bash files named as `your_team_name_player` and `your_team_name_adversary`. Put all your files in this folder and name it as `your_team_name`. These bash files should take in as first argument a port number and accordingly call your program to connect on that port number. If not passed it should take default as 5000. Give your bash files executable permissions.
