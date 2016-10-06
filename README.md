@@ -68,7 +68,9 @@ Adversary will also get the location of player as:
 
 where y is the current location of the player.
 
-Game's end is specified via a delimiter `$`. If at any point you receive it, you should close the socket connection. Winner will be decided on architecture side. 
+Game's end is specified via a delimiter `$`. If at any point you receive it, you should close the socket connection. Winner will be decided on architecture side.
+
+You can check the test clients in [test-clients](test-clients/) folder.
 
 **Note**: Architecture is a work in progress and will be thorougly tested and fully completed by the night of competition.
 
