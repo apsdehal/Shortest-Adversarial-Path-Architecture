@@ -13,4 +13,4 @@ net.createServer(function (sock) {
 }).listen(5000);
 
 console.log('Server started');
-console.log('Waiting for player 1');
+console.log('Waiting for player');

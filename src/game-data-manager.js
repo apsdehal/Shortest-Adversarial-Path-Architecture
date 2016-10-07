@@ -1,5 +1,7 @@
 module.exports = new GameDataManager();
+
 var Graph = require('./graph.js');
+const chalk = require('chalk');
 
 function GameDataManager() {
   this.graph;
@@ -73,6 +75,6 @@ GameDataManager.prototype.initialize = function (data) {
   };
 
   GameDataManager.prototype.showFinalCost = function () {
-    console.log("Final cost of Player 1 is", this.playerBill);
+    console.log(chalk.red("Final cost of Player 1 is", this.playerBill));
   }
 }
