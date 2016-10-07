@@ -8,6 +8,8 @@ function ConnectionHandler() {
     this.playerTwoName;
     this.playerOneActive = false;
     this.playerTwoActive = false;
+    this.playerOneTurn = false;
+    this.playerTwoTurn = false;
 };
 
 ConnectionHandler.prototype.handleConnections = function (sock, cb) {
@@ -22,6 +24,7 @@ ConnectionHandler.prototype.handleConnections = function (sock, cb) {
     this.playerTwoSock = sock;
     this.playerTwoActive = true;
     this.gameActive = true;
+    this.playerOneTurn = true;
     cb(this);
     return;
   }
@@ -38,15 +41,29 @@ ConnectionHandler.prototype.sendFile = function(data) {
 ConnectionHandler.prototype.startConversation = function(gameManager) {
   var self = this;
   this.playerOneSock.on('data', function(data) {
+    if (!self.playerOneTurn) {
+      return;
+    }
     var hasEnded = gameManager.playerOneMove(data.toString(), self);
+
+    self.playerOneTurn = false;
+    self.playerTwoTurn = true;
 
     if (hasEnded) {
       self.endConnections();
     }
+
   })
 
   this.playerTwoSock.on('data', function(data) {
+    if (!self.playerTwoTurn) {
+      return;
+    }
+
     gameManager.playerTwoMove(data.toString(), self);
+
+    self.playerTwoTurn = false;
+    self.playerOneTurn = true;
   });
 };
 
