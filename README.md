@@ -68,6 +68,8 @@ Adversary will also get the location of player as:
 
 where y is the current location of the player.
 
+When the clients first connect, player is expected to send first move, then the adversary. If adversary or player send anything before their subsequent turns, those moves will be ignored.
+
 Game's end is specified via a delimiter `$`. If at any point you receive it, you should close the socket connection. Winner will be decided on architecture side.
 
 You can check the test clients in [test-clients](test-clients/) folder.
