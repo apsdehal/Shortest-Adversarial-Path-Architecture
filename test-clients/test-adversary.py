@@ -27,6 +27,7 @@ while(1):
     if "$" in data:
         break
 
+    print "Got " + data
     curr = allData[count]
     count += 1
     print "Selecting edge " + curr
