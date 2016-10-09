@@ -1,3 +1,4 @@
+
 # Echo client program
 import socket
 import time
@@ -26,7 +27,7 @@ while(1):
     if "$" in data:
         break
 
-    print "Got " + data
+    print "Got " + data;
     curr = allData[count]
     count += 1
     print "Selecting " + curr.split(" ")[1]
