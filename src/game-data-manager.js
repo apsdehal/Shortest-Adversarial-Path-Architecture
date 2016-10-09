@@ -36,45 +36,45 @@ GameDataManager.prototype.initialize = function (data) {
     curr = data[i].split(' ');
     this.graph.addEdge(curr[0].trim(), curr[1].trim());
   }
+}
 
-  GameDataManager.prototype.setPlayerOnePosition = function(y) {
-    this.addBill(y);
-    this.playerOnePosition = y;
+GameDataManager.prototype.setPlayerOnePosition = function(y) {
+  this.addBill(y);
+  this.playerOnePosition = y;
 
-    if (this.endPoint === this.playerOnePosition){
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  GameDataManager.prototype.getPlayerOnePosition = function() {
-    return this.playerOnePosition;
+  if (this.endPoint === this.playerOnePosition){
+    return true;
+  } else {
+    return false;
   }
+};
 
-  GameDataManager.prototype.doubleEdgeCost = function (x, y) {
-    return this.graph.doubleCost(x, y);
-  };
+GameDataManager.prototype.getPlayerOnePosition = function() {
+  return this.playerOnePosition;
+}
 
-  GameDataManager.prototype.addBill = function(y) {
-    this.playerBill += this.graph.getEdgeCost(this.playerOnePosition, y);
-  };
+GameDataManager.prototype.doubleEdgeCost = function (x, y) {
+  return this.graph.doubleCost(x, y);
+};
 
-  GameDataManager.prototype.reset = function () {
-    this.playerOnePosition = this.startPoint;
-    this.playerBill = 0;
-    this.initialize(this.originalData);
-  };
+GameDataManager.prototype.addBill = function(y) {
+  this.playerBill += this.graph.getEdgeCost(this.playerOnePosition, y);
+};
 
-  GameDataManager.prototype.validateMove = function (x, y) {
-    if (!y) {
-      y = x;
-      x = this.playerOnePosition;
-    }
-    return this.graph.validEdge(x, y);
-  };
+GameDataManager.prototype.reset = function () {
+  this.playerOnePosition = this.startPoint;
+  this.playerBill = 0;
+  this.initialize(this.originalData);
+};
 
-  GameDataManager.prototype.showFinalCost = function () {
-    console.log(chalk.red("Final cost of Player 1 is", this.playerBill));
+GameDataManager.prototype.validateMove = function (x, y) {
+  if (!y) {
+    y = x;
+    x = this.playerOnePosition;
   }
+  return this.graph.validEdge(x, y);
+};
+
+GameDataManager.prototype.showFinalCost = function () {
+  console.log(chalk.red("Final cost of Player 1 is", this.playerBill));
 }

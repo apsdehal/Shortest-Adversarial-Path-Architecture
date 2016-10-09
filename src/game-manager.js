@@ -57,6 +57,10 @@ GameManager.prototype.playerTwoMove = function(data, connHandler) {
 }
 
 GameManager.prototype.validateMove = function (data, player) {
+  if (data.length === 0) {
+    return false;
+  }
+  
   if (player === 1) {
     return this.gameData.validateMove(data)
   } else {
