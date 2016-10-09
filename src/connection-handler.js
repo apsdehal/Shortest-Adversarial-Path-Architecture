@@ -96,7 +96,9 @@ ConnectionHandler.prototype.endConnections = function () {
 
 ConnectionHandler.prototype.notifyGameEnd = function() {
   this.notifyPlayerOne('$');
+  this.timer.clear();
   this.notifyPlayerTwo('$');
+  this.timer.clear();
 }
 
 ConnectionHandler.prototype.reset = function () {
