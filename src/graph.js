@@ -59,5 +59,8 @@ Graph.prototype.getEdgeNumber = function(x, y) {
 }
 
 Graph.prototype.validEdge = function(x, y) {
+  if (typeof this.adjacencyList[x] == 'undefined') {
+    return 0;
+  }
   return this.adjacencyList[x].indexOf(y) > -1 ? 1 : 0;
 }
