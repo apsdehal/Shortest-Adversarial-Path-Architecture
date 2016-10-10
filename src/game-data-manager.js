@@ -1,5 +1,6 @@
 module.exports = new GameDataManager();
 
+var strint = require('./lib/strint');
 var Graph = require('./graph.js');
 const chalk = require('chalk');
 
@@ -9,7 +10,7 @@ function GameDataManager() {
   this.playerOnePosition;
   this.endPoint;
   this.originalData;
-  this.playerBill = 0;
+  this.playerBill = '0';
 }
 
 GameDataManager.prototype.initialize = function (data) {
@@ -24,7 +25,7 @@ GameDataManager.prototype.initialize = function (data) {
   this.startPoint = startPoint;
   this.endPoint = endPoint;
   this.playerOnePosition = this.startPoint;
-  this.playerBill = 0;
+  this.playerBill = '0';
 
   data.splice(0, 3);
 
@@ -58,12 +59,14 @@ GameDataManager.prototype.doubleEdgeCost = function (x, y) {
 };
 
 GameDataManager.prototype.addBill = function(y) {
-  this.playerBill += this.graph.getEdgeCost(this.playerOnePosition, y);
+  var self = this;
+  this.playerBill = strint.add(this.playerBill,
+    this.graph.getEdgeCost(this.playerOnePosition, y));
 };
 
 GameDataManager.prototype.reset = function () {
   this.playerOnePosition = this.startPoint;
-  this.playerBill = 0;
+  this.playerBill = '0';
   this.initialize(this.originalData);
 };
 

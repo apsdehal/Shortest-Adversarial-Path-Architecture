@@ -1,3 +1,4 @@
+var strint = require('./lib/strint');
 module.exports = Graph;
 
 function Edge(x, y, cost) {
@@ -14,7 +15,7 @@ function Graph() {
 
 Graph.prototype.addEdge = function(x, y) {
   this.edgeNumber[x + " " + y] = this.edges.length;
-  this.edges.push(new Edge(x, y, 1));
+  this.edges.push(new Edge(x, y, '1'));
 
   if (!this.adjacencyList[x]) {
     this.adjacencyList[x] = [y];
@@ -31,7 +32,7 @@ Graph.prototype.addEdge = function(x, y) {
 
 Graph.prototype.doubleCost = function(x, y) {
   var edgeNo = this.getEdgeNumber(x, y);
-  this.edges[edgeNo].cost *= 2;
+  this.edges[edgeNo].cost = strint.mul(this.edges[edgeNo].cost, '2');
   return this.edges[edgeNo].cost;
 }
 
