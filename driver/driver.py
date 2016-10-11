@@ -5,10 +5,10 @@ import threading
 import time
 import socket
 
-fileName = sys.argv[1] 
+fileName = sys.argv[1]
 file = open(fileName, 'r')
 teams = [x.strip() for x in file.readlines()]
-dir_path = os.path.dirname(os.path.realpath(__file__)) 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def killProcs(proc1,proc2):
 	proc1.kill()
@@ -24,7 +24,7 @@ for i in range(0,len(teams)-1):
 	for j in range(i+1,len(teams)):
 		while 1:
 			data = s.recv(1024)
-			if not data: 
+			if data == 'start':
 				break
 		team1 = teams[i]
 		team2 = teams[j]
@@ -56,7 +56,7 @@ for i in range(0,len(teams)-1):
 		#waiting for server to give command
 		while 1:
 			data = s.recv(1024)
-			if not data: 
+			if data == 'start':
 				break
 
 		#run team2 as player and team1 as adversary

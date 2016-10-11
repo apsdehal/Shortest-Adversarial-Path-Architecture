@@ -1,4 +1,5 @@
 var Timer = require('./timer');
+var DriverConnectionHandler = require('./driver-connection-handler');
 const chalk = require('chalk');
 
 module.exports = new ConnectionHandler();
@@ -13,7 +14,9 @@ function ConnectionHandler() {
     this.playerTwoActive = false;
     this.playerOneTurn = false;
     this.playerTwoTurn = false;
+    this.driverSock = new DriverConnectionHandler();
     this.timer;
+    this.db;
 };
 
 ConnectionHandler.prototype.handleConnections = function (sock, cb) {
@@ -37,13 +40,33 @@ ConnectionHandler.prototype.handleConnections = function (sock, cb) {
   return;
 };
 
+ConnectionHandler.prototype.setName = function (data, gameManager) {
+  data = data.split(' ').map(function (x) {
+    return x.trim();
+  })
+
+  this.playerOneName = data[0];
+  this.playerTwoName = data[1];
+  this.db = gameManager.db;
+
+  gameManager.insertMatch(data[0], data[1]);
+}
+
 ConnectionHandler.prototype.sendFile = function(data) {
   this.playerOneSock.write(data + '#\n');
   this.playerTwoSock.write(data + '#\n');
 };
 
+ConnectionHandler.prototype.startDriverListen = function() {
+  var self = this;
+  this.driverSock.listen(function (data) {
+    self.setName(data, gameManager);
+  });
+}
+
 ConnectionHandler.prototype.startConversation = function(gameManager) {
   var self = this;
+
   this.timer = new Timer();
 
   this.timer.startCounting(this, 1);
@@ -120,13 +143,16 @@ ConnectionHandler.prototype.reset = function () {
   this.timer.clear();
   this.timer = new Timer();
   console.log('Waiting for player');
+  this.driverSock.write('start');
 };
 
 ConnectionHandler.prototype.endGameTimeout = function(num) {
   if (num === 1) {
-    console.log(chalk.red('Player timed out'));
+    console.log(chalk.red(this.playerName, 'timed out'));
+    this.db.incrementTeamScore(this.adversaryName);
   } else {
-    console.log(chalk.red('Adversary timed out'));
+    console.log(chalk.red(this.adversaryName, 'timed out'));
+    this.db.incrementTeamScore(this.playerName);
   }
 
   this.notifyGameEnd();
