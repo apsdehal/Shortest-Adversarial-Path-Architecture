@@ -189,7 +189,7 @@ ConnectionHandler.prototype.endGameTimeout = function(num) {
     this.ioHandler.send('result', {
       player: this.playerOneName,
       adversary: this.playerTwoName,
-      cost: 0
+      cost: (num == 1) ? -1 : -2
     });
 
     this.ioHandler.send('scores', {
