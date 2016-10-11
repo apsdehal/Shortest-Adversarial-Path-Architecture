@@ -5,11 +5,12 @@ function DriverConnectionHandler() {
   this.sock = null;
 }
 
-DriverConnectionHandler.prototype.init = function () {
+DriverConnectionHandler.prototype.init = function (cb) {
   var self = this;
   net.createServer(function (sock) {
       if (!self.sock) {
         self.sock = sock;
+        cb();
         self.sock.write('start');
       }
   }).listen(5001);
