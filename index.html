@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Shortest Adversial Path</title>
 <style>
 table {
     font-family: arial, sans-serif;
@@ -24,155 +25,239 @@ th {
 tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+.match_information {
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+.match_information span {
+  text-align: center;
+  font-size: 1.4em;
+}
 </style>
 </head>
 <body>
-
+<div class='match_information'><span></span></div>
+<br/>
 <table>
   <tr>
     <th>SCORES</th>
+    <th class='reptar'>Reptar</th>
+    <th class='wa'>WA</th>
+    <th class='null'>NULL</th>
+    <th class='demented_banana'>Demented Banana</th>
+    <th class='_442'>442</th>
+    <th class='_42'>42</th>
+    <th class='longnames'>LongNames</th>
+    <th class='zorro'>Zorro</th>
+    <th class='play_and_prey'>Play and Prey</th>
+    <th class='wildcards'>WildCards</th>
+    <th class='no_escape'>No Escape</th>
+  </tr>
+  <tr class='reptar'>
     <th>Reptar</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='reptar'>
     <th>WA</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='null'>
     <th>NULL</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='demented_banana'>
     <th>Demented Banana</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='_442'>
     <th>442</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='_42'>
+    <th>42</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='longnames'>
     <th>LongNames</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='zorro'>
     <th>Zorro</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='play_and_prey'>
     <th>Play and Prey</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='wildcards'>
     <th>WildCards</th>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
+  </tr>
+  <tr class='no_escape'>
     <th>No Escape</th>
-  </tr>
-  <tr>
-    <th>Reptar</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>WA</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>NULL</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>Demented Banana</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>442</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>LongNames</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>Zorro</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>Play and Prey</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>WildCards</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-  </tr>
-  <tr>
-    <th>No Escape</th>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
-    <td> 0 </td>
+    <td class='reptar'> 0 </td>
+    <td class='wa'> 0 </td>
+    <td class='null'> 0 </td>
+    <td class='demented_banana'> 0 </td>
+    <td class='_442'> 0 </td>
+    <td class='_42'> 0 </td>
+    <td class='longnames'> 0 </td>
+    <td class='zorro'> 0 </td>
+    <td class='play_and_prey'> 0 </td>
+    <td class='wildcreds'> 0 </td>
+    <td class='no_escape'> 0 </td>
   </tr>
 </table>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  var socket = io();
+  socket.on('match', function (msg) {
+    var player = msg.player;
+    var adversary = msg.adversary;
+
+    if (player && adversary){
+      console.log(player, adversary);
+      var insert = player + ' vs. ' + adversary;
+      $('.match_information span').html(insert);
+    }
+  });
+
+  socket.on('result', function (msg) {
+    var player = msg.player;
+    var adversary = msg.adversary;
+
+    player = player.split(' ').map(function (x) {
+      return x.toLowerCase();
+    }).join('_');
+
+    adversary = adversary.split(' ').map(function (x) {
+      return x.toLowerCase();
+    }).join('_');
+
+    if (player[0] == '4') {
+      player = '_' + player;
+    }
+
+    if (adversary[0] == '4') {
+      adversary = '_' + adversary;
+    }
+
+    var selectorString = '.' + player +  ' .' + adversary;
+    console.log($(selectorString));
+
+    if (msg.score == 0) {
+      msg.score = -1;
+    }
+
+    $(selectorString).html(msg.cost);
+  })
+</script>
 
 </body>
 </html>
