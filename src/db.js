@@ -15,8 +15,8 @@ function DB(filename, inMemory) {
 
   db.serialize(function () {
     if (!exists) {
-      db.run('CREATE TABLE teams (id int NOT NULL, name varchar(255) NOT NULL, score int DEFAULT 0. PRIMARY_KEY (id))');
-      db.run('CREATE TABLE matches (id int NOT NULL, player_id int NOT NULL, adversary_id int NOT NULL, score int DEFAULT -1, PRIMARY_KEY(id))');
+      db.run('CREATE TABLE teams (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255) NOT NULL, score INTEGER DEFAULT 0)');
+      db.run('CREATE TABLE matches (id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL, adversary_id INTEGER NOT NULL, score INTEGER DEFAULT -1)');
     }
   })
 }
@@ -25,14 +25,14 @@ function DB(filename, inMemory) {
 DB.prototype.insertMatch = function(playerName, adversaryName) {
   var db = this.db;
   db.serialize(function () {
-    db.get('SELECT FROM teams WHERE name = ?', playerName, function (err, row) {
+    db.get('SELECT * FROM teams WHERE name = [?]', playerName, function (err, row) {
       var playerRow = row;
 
-      db.get('SELECT FROM teams WHERE name = ?', adversaryName, function (err, row) {
+      db.get('SELECT * FROM teams WHERE name = [?]', adversaryName, function (err, row) {
         var adversaryRow = row;
 
         db.run('INSERT OR IGNORE INTO matches (player_id, adversary_id, score) VALUES(?, ?, ?)', [playerRow.id, adversaryRow.id, -2]);
-      });(
+      });
     });
 
   })
@@ -41,33 +41,50 @@ DB.prototype.insertMatch = function(playerName, adversaryName) {
 DB.prototype.finalizeMatch = function(playerName, adversaryName, score) {
   var db = this.db;
   db.serialize(function () {
-    db.get('SELECT FROM teams WHERE name = ?', playerName, function (err, row) {
+    db.get('SELECT * FROM teams WHERE name = [?]', playerName, function (err, row) {
       var playerRow = row;
 
-      db.get('SELECT FROM teams WHERE name = ?', adversaryName, function (err, row) {
+      db.get('SELECT * FROM teams WHERE name = [?]', adversaryName, function (err, row) {
         var adversaryRow = row;
 
         db.run('UPDATE matches SET score = ? WHERE player_id = ? AND adversary_id = ?)', [score, playerRow.id, adversaryRow.id]);
-      });(
+      });
     });
 
   })
 }
 
 DB.prototype.insertTeam = function (team) {
-  db.run('INSERT INTO teams (name) VALUES(?)', team);
+  var db = this.db;
+  db.serialize(function () {
+    db.get('SELECT * FROM teams WHERE name = [?]', team, function (err, rows) {
+      if (err) {
+        return;
+      }
+      if (!rows) {
+        db.run('INSERT INTO teams (name) VALUES (?)', team);
+      }
+    });
+  });
 }
 
 DB.prototype.incrementTeamScore = function(teamName, score) {
   var db = this.db;
-  db.run('UPDATE teams SET score = score + 1 WHERE name = ?', teamName);
+  db.run('UPDATE teams SET score = score + 1 WHERE name = [?]', teamName);
 }
 
 DB.prototype.getTeams = function (callback) {
-  db.run('SELECT * FROM teams', callback);
+  var db = this.db;
+  db.all('SELECT * FROM teams', function (err, rows) {
+    if (err) {
+      return;
+    }
+    callback(rows)
+  });
 }
 
 DB.prototype.getCurrentMatch = function (callback) {
+  var db = this.db;
   db.serialize(function () {
 
     db.get('SELECT * FROM matches WHERE score = -2', function (err, row) {
@@ -96,7 +113,8 @@ DB.prototype.getCurrentMatch = function (callback) {
 }
 
 DB.prototype.getMatches = function (callback) {
-  db.get('SELECT * FROM matches', function (err, rows) {
+  var db = this.db;
+  db.all('SELECT * FROM matches', function (err, rows) {
     if (err) {
       return;
     }
