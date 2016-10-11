@@ -1,123 +1,89 @@
 module.exports = DB;
 var fs = require('fs');
-var sqlite3 = require('sqlite3').verbose();
+var sqlite = require('sqlite-sync');
 
-function DB(filename, inMemory) {
+function DB(filename) {
   var file = filename;
-  var exists = fs.existsSync(filename);
 
-  if (inMemory) {
+  var exists;
+  if (file) {
+   exists = fs.existsSync(filename);
+ }
+
+  if (!file) {
     exists = false;
+    sqlite.connect();
+  } else {
+    sqlite.connect(file);
   }
 
-  var db = new sqlite3.Database(file);
-  this.db = db;
+  this.db = sqlite;
 
-  db.serialize(function () {
-    if (!exists) {
-      db.run('CREATE TABLE teams (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255) NOT NULL, score INTEGER DEFAULT 0)');
-      db.run('CREATE TABLE matches (id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL, adversary_id INTEGER NOT NULL, score INTEGER DEFAULT -1)');
-    }
-  })
+  if (!exists) {
+    this.db.run('CREATE TABLE teams (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255) NOT NULL, score INTEGER DEFAULT 0)');
+    this.db.run('CREATE TABLE matches (id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER NOT NULL, adversary_id INTEGER NOT NULL, score INTEGER DEFAULT 0)');
+  }
 }
 
 
 DB.prototype.insertMatch = function(playerName, adversaryName) {
   var db = this.db;
-  db.serialize(function () {
-    db.get('SELECT * FROM teams WHERE name = [?]', playerName, function (err, row) {
-      var playerRow = row;
+  var playerRow = db.run('SELECT * FROM teams WHERE name = ?', [playerName])
 
-      db.get('SELECT * FROM teams WHERE name = [?]', adversaryName, function (err, row) {
-        var adversaryRow = row;
+  var adversaryRow = db.run('SELECT * FROM teams WHERE name = ?', [adversaryName]);
 
-        db.run('INSERT OR IGNORE INTO matches (player_id, adversary_id, score) VALUES(?, ?, ?)', [playerRow.id, adversaryRow.id, -2]);
-      });
-    });
+  db.run('UPDATE matches SET score = 0 WHERE score = -1');
+  db.run('INSERT OR IGNORE INTO matches (player_id, adversary_id, score) VALUES(?, ?, ?)', [playerRow[0].id, adversaryRow[0].id, -1]);
 
-  })
 }
 
 DB.prototype.finalizeMatch = function(playerName, adversaryName, score) {
   var db = this.db;
-  db.serialize(function () {
-    db.get('SELECT * FROM teams WHERE name = [?]', playerName, function (err, row) {
-      var playerRow = row;
+  var playerRow = db.run('SELECT * FROM teams WHERE name = ?', [playerName])[0];
 
-      db.get('SELECT * FROM teams WHERE name = [?]', adversaryName, function (err, row) {
-        var adversaryRow = row;
-
-        db.run('UPDATE matches SET score = ? WHERE player_id = ? AND adversary_id = ?)', [score, playerRow.id, adversaryRow.id]);
-      });
-    });
-
-  })
+  var adversaryRow =  db.run('SELECT * FROM teams WHERE name = ?', [adversaryName])[0];
+  db.run('UPDATE matches SET score = ? WHERE player_id = ? AND adversary_id = ?', [score, playerRow.id, adversaryRow.id]);
 }
 
 DB.prototype.insertTeam = function (team) {
   var db = this.db;
-  db.serialize(function () {
-    db.get('SELECT * FROM teams WHERE name = [?]', team, function (err, rows) {
-      if (err) {
-        return;
-      }
-      if (!rows) {
-        db.run('INSERT INTO teams (name) VALUES (?)', team);
-      }
-    });
-  });
+  var rows = db.run('SELECT * FROM teams WHERE name = ?', [team]);
+  if (rows.length == 0) {
+    db.run('INSERT INTO teams (name) VALUES (?)', [team]);
+  }
+}
+
+DB.prototype.getTeam = function (team) {
+  var teamRow = this.db.run('SELECT * FROM teams WHERE name = ?', [team])[0];
+  return teamRow;
 }
 
 DB.prototype.incrementTeamScore = function(teamName, score) {
   var db = this.db;
-  db.run('UPDATE teams SET score = score + 1 WHERE name = [?]', teamName);
+  db.run('UPDATE teams SET score = score + 1 WHERE name = ?', [teamName]);
 }
 
 DB.prototype.getTeams = function (callback) {
   var db = this.db;
-  db.all('SELECT * FROM teams', function (err, rows) {
-    if (err) {
-      return;
-    }
-    callback(rows)
-  });
+  var rows = db.run('SELECT * FROM teams');
+  callback(rows)
 }
 
 DB.prototype.getCurrentMatch = function (callback) {
   var db = this.db;
-  db.serialize(function () {
+  var match = db.run('SELECT * FROM matches WHERE score = -1');
 
-    db.get('SELECT * FROM matches WHERE score = -2', function (err, row) {
-      if (err) {
-        return;
-      }
-      if (row) {
-        db.get('SELECT * FROM teams where id = ?', row.player_id, function (err, player) {
-            if (err) {
-              return;
-            } else {
-              var playerTeam = player.name;
-              db.get('SELECT * FROM teams where id = ?', row.adversary_id, function (err, adversary) {
-                if (err) {
-                  return;
-                } else {
-                  var adversaryName = adversary.name;
-                  callback(playerName, adversaryName);
-                }
-              });
-            }
-        })
-      }
-    });
-  });
+  if (match.length === 0) {
+    callback(null, null);
+    return;
+  }
+
+  var player = db.run('SELECT * FROM teams where id = ?', [match[0].player_id]);
+  var adversary = db.run('SELECT * FROM teams where id = ?', [match[0].adversary_id]);
+  callback(player[0], adversary[0]);
 }
 
 DB.prototype.getMatches = function (callback) {
   var db = this.db;
-  db.all('SELECT * FROM matches', function (err, rows) {
-    if (err) {
-      return;
-    }
-    callback(rows);
-  });
+  callback(db.run('SELECT * FROM matches'));
 }
