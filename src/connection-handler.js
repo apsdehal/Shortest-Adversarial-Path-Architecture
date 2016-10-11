@@ -55,7 +55,13 @@ ConnectionHandler.prototype.startConversation = function(gameManager) {
 
     self.timer.clearPlayerTimeout(1);
 
-    var hasEnded = gameManager.playerOneMove(data.toString(), self);
+    var hasEnded = false;
+    try {
+      hasEnded = gameManager.playerOneMove(data.toString(), self);
+    } catch (e) {
+      hasEnded = false;
+      console.log(e);
+    }
 
     self.playerOneTurn = false;
     self.playerTwoTurn = true;
@@ -73,7 +79,11 @@ ConnectionHandler.prototype.startConversation = function(gameManager) {
 
     self.timer.clearPlayerTimeout(2);
 
-    gameManager.playerTwoMove(data.toString(), self);
+    try {
+      gameManager.playerTwoMove(data.toString(), self);
+    } catch (e) {
+      console.log(e);
+    }
 
     self.playerTwoTurn = false;
     self.playerOneTurn = true;
