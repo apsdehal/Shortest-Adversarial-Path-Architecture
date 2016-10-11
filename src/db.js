@@ -54,6 +54,10 @@ DB.prototype.finalizeMatch = function(playerName, adversaryName, score) {
   })
 }
 
+DB.prototype.insertTeam = function (team) {
+  db.run('INSERT INTO teams (name) VALUES(?)', team);
+}
+
 DB.prototype.incrementTeamScore = function(teamName, score) {
   var db = this.db;
   db.run('UPDATE teams SET score = score + 1 WHERE name = ?', teamName);
@@ -90,7 +94,6 @@ DB.prototype.getCurrentMatch = function (callback) {
     });
   });
 }
-
 
 DB.prototype.getMatches = function (callback) {
   db.get('SELECT * FROM matches', function (err, rows) {
