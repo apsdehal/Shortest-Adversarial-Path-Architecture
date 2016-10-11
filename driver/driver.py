@@ -37,18 +37,18 @@ for i in range(0,len(teams)-1):
 
 		print "Running " + team1 + " " + team2
 
+		os.chdir(dir_path + "/" + team1)
 		if(not os.path.isfile(player)):
 			player = player + ".sh"
-		os.chdir(dir_path + "/" + team1)
 		proc1 = subprocess.Popen("exec " + player, shell = True)
 		os.chdir(dir_path)
 		time.sleep(2)
+		os.chdir(dir_path + "/" + team2)
 		if(not os.path.isfile(adversary)):
 			adversary = adversary + ".sh"
-		os.chdir(dir_path + "/" + team2)
 		proc2 = subprocess.Popen("exec " + adversary, shell = True)
 		os.chdir(dir_path)
-		timer = threading.Timer(10, killProcs, [proc1,proc2])
+		timer = threading.Timer(240, killProcs, [proc1,proc2])
 		timer.start()
 		proc1.communicate()
 		proc2.communicate()
@@ -64,9 +64,9 @@ for i in range(0,len(teams)-1):
 		#run team2 as player and team1 as adversary
 		player = "./" + team2 + "_player"
 		adversary = "./" + team1 + "_adversary"
+		os.chdir(dir_path + "/" + team2)
 		if(not os.path.isfile(player)):
 			player = player + ".sh"
-		os.chdir(dir_path + "/" + team2)
 
 		#sending data to server
 		s.send(team2 + " " + team1)
@@ -74,12 +74,12 @@ for i in range(0,len(teams)-1):
 		proc1 = subprocess.Popen("exec " + player, shell = True)
 		os.chdir(dir_path)
 		time.sleep(2)
+		os.chdir(dir_path + "/" + team1)
 		if(not os.path.isfile(adversary)):
 			adversary = adversary + ".sh"
-		os.chdir(dir_path + "/" + team1)
 		proc2 = subprocess.Popen("exec " + adversary, shell = True)
 		os.chdir(dir_path)
-		timer = threading.Timer(10.0, killProcs,[proc1,proc2])
+		timer = threading.Timer(240.0, killProcs,[proc1,proc2])
 		timer.start()
 		proc1.communicate()
 		proc2.communicate()
