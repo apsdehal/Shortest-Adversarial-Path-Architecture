@@ -58,9 +58,41 @@ DB.prototype.getTeam = function (team) {
   return teamRow;
 }
 
-DB.prototype.incrementTeamScore = function(teamName, score) {
+DB.prototype.incrementTeamScore = function(teamName) {
   var db = this.db;
   db.run('UPDATE teams SET score = score + 1 WHERE name = ?', [teamName]);
+}
+
+DB.prototype.incrementTeamScoreBasedOnMatch = function(playerName, adversaryName) {
+  var playerId = this.db.run('SELECT * FROM teams WHERE name = ?', [playerName])[0].id;
+  var adversaryId = this.db.run('SELECT * FROM teams WHERE name = ?', [adversaryName])[0].id;
+
+  var playerAdversaryScoreRow = this.db.run('SELECT * FROM matches WHERE player_id = ? AND adversary_id = ?', [playerId, adversaryId]);
+
+  var adversaryPlayerScoreRow = this.db.run('SELECT * FROM matches WHERE player_id = ? AND adversary_id = ?', [adversaryId, playerId]);
+
+  if (!playerAdversaryScoreRow.length || !adversaryPlayerScoreRow.length) {
+    return;
+  }
+
+  playerAdversaryScoreRow = playerAdversaryScoreRow[0];
+  adversaryPlayerScoreRow = adversaryPlayerScoreRow[0];
+
+  var winner;
+
+  if (playerAdversaryScoreRow.score === 0) {
+    winner = adversaryName;
+  } else if (adversaryPlayerScoreRow.score === 0) {
+    winner = playerName;
+  } else {
+    if (playerAdversaryScoreRow.score < adversaryPlayerScoreRow.score) {
+      winner = playerName;
+    } else {
+      winner = adversaryName;
+    }
+  }
+
+  rhis.incrementTeamScore(winner);
 }
 
 DB.prototype.getTeams = function (callback) {
