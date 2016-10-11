@@ -3,6 +3,8 @@ module.exports = new GameDataManager();
 var strint = require('./lib/strint');
 var Graph = require('./graph.js');
 const chalk = require('chalk');
+var argv = require('minimist')(process.argv.slice(2));
+
 
 function GameDataManager() {
   this.graph;
@@ -72,11 +74,13 @@ GameDataManager.prototype.reset = function () {
 
 GameDataManager.prototype.validateMove = function (name, x, y) {
   if (!y) {
-    console.log(chalk.green(name, 'wants to move to', x));
+    if (argv.v)
+      console.log(chalk.green(name, 'wants to move to', x));
     y = x;
     x = this.playerOnePosition;
   } else {
-    console.log(chalk.green(name, 'has doubled', x, y));
+    if (argv.v)
+      console.log(chalk.green(name, 'has doubled', x, y));
   }
 
   return this.graph.validEdge(x, y);

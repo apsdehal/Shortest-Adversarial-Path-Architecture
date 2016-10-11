@@ -14,7 +14,7 @@ td, th {
     text-align: center;
     padding: 8px;
     width: 9.09%;
-    height: 40px;
+    height: 30px;
 }
 
 th {
@@ -36,6 +36,11 @@ tr:nth-child(even) {
   text-align: center;
   font-size: 1.4em;
 }
+
+.chart-div {
+  margin-top: 40px;
+}
+
 </style>
 </head>
 <body>
@@ -211,18 +216,41 @@ tr:nth-child(even) {
     <td class='no_escape'> 0 </td>
   </tr>
 </table>
+
+<div class="chart-div">
+<canvas id="arch-chart" width="1080" height="200"></canvas>
+</div>
+
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.min.js"></script>
 
 <script>
   var socket = io();
+  var ctx = document.getElementById('arch-chart').getContext('2d');
+  Chart.defaults.global.legend.display = false;
+
+
+  var data = {
+    labels: [],
+    datasets: [{
+      label: 'SAP',
+      data: [0, 0, 0, 0],
+      backgroundColor: 'rgba(255, 99, 132, 0.2)'
+    }]
+  };
+
+  var barChart = new Chart(ctx, {
+    type: 'bar',
+    data: data
+  });
+
   socket.on('match', function (msg) {
     var player = msg.player;
     var adversary = msg.adversary;
 
     if (player && adversary){
-      console.log(player, adversary);
       var insert = player + ' vs. ' + adversary;
       $('.match_information span').html(insert);
     }
@@ -249,14 +277,28 @@ tr:nth-child(even) {
     }
 
     var selectorString = '.' + player +  ' .' + adversary;
-    console.log($(selectorString));
 
     if (msg.score == 0) {
       msg.score = -1;
     }
 
     $(selectorString).html(msg.cost);
-  })
+  });
+
+  socket.on('scores', function (teams) {
+    var labels = [];
+    var data = [];
+    var teams = teams.data;
+    for(var i = 0; i < teams.length; i++) {
+      labels.push(teams[i].name);
+      data.push(teams[i].score);
+    }
+
+    console.log(data);
+    barChart.config.data.labels = labels;
+    barChart.data.datasets[0].data = data;
+    barChart.update();
+  });
 </script>
 
 </body>

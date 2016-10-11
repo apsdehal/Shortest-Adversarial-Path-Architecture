@@ -101,7 +101,7 @@ DB.prototype.incrementTeamScoreBasedOnMatch = function(playerName, adversaryName
 DB.prototype.getTeams = function (callback) {
   var db = this.db;
   var rows = db.run('SELECT * FROM teams');
-  callback(rows)
+  return rows;
 }
 
 DB.prototype.getCurrentMatch = function (callback) {

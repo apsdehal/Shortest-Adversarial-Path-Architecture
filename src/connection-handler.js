@@ -181,6 +181,10 @@ ConnectionHandler.prototype.endGameTimeout = function(num) {
       adversary: this.playerTwoName,
       cost: 0
     });
+
+    this.ioHandler.send('scores', {
+      data: this.db.getTeams()
+    });
   }
 
 

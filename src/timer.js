@@ -1,5 +1,6 @@
 module.exports = Timer;
 const chalk = require('chalk');
+var argv = require('minimist')(process.argv.slice(2));
 
 function Timer() {
   this.playerOneTimer = 0;
@@ -31,10 +32,12 @@ Timer.prototype.startCounting = function(connHandler, num) {
 Timer.prototype.clearPlayerTimeout = function(num) {
   if (num === 1) {
     this.playerOneTimer += Date.now() - this.playerStartTime;
-    console.log(chalk.cyan(this.playerOneName, 'has', (this.totalTimeAvailable - this.playerOneTimer) / 1000, 'seconds left'));
+    if (argv.v)
+      console.log(chalk.cyan(this.playerOneName, 'has', (this.totalTimeAvailable - this.playerOneTimer) / 1000, 'seconds left'));
   } else if (num === 2) {
     this.playerTwoTimer += Date.now() - this.playerStartTime;
-    console.log(chalk.yellow(this.playerTwoName, 'has', (this.totalTimeAvailable - this.playerTwoTimer) / 1000, 'seconds left'));
+    if (argv.v)
+      console.log(chalk.yellow(this.playerTwoName, 'has', (this.totalTimeAvailable - this.playerTwoTimer) / 1000, 'seconds left'));
   }
 
   this.clear();

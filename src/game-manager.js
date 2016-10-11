@@ -90,6 +90,10 @@ GameManager.prototype.notifyEndGame = function (connHandler) {
     cost: finalCost
   });
 
+  this.ioHandler.send('scores', {
+    data: this.db.getTeams()
+  })
+
   this.db.incrementTeamScoreBasedOnMatch(this.playerName, this.adversaryName);
 
   this.gameData.reset();
