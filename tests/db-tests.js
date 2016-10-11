@@ -12,18 +12,15 @@ module.exports = function () {
         db.insertTeam('zorro');
         db.insertTeam('zorro');
 
-        function callback(rows) {
-          var teams = [];
-          for(var i = 0; i < rows.length; i++) {
-            teams.push(rows[i].name);
-          }
-
-          var teamsComp = ['jeopardy', 'null', '442', '42', 'zorro'];
-          assert.deepEqual(teams, teamsComp);
-          done();
+        var rows = db.getTeams();
+        var teams = [];
+        for(var i = 0; i < rows.length; i++) {
+          teams.push(rows[i].name);
         }
 
-        db.getTeams(callback);
+        var teamsComp = ['jeopardy', 'null', '442', '42', 'zorro'];
+        assert.deepEqual(teams, teamsComp);
+        done();
     });
 
     it('should insert matches properly', function (done) {
