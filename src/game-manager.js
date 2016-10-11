@@ -7,10 +7,12 @@ function GameManager() {
   this.db = new DB();
   this.playerName = 'Player';
   this.adversaryName = 'Adversary';
+  this.ioHandler;
 }
 
-GameManager.prototype.initializeGame = function(data) {
+GameManager.prototype.initializeGame = function(data, ioHandler) {
   this.gameData.initialize(data);
+  this.ioHandler = ioHandler;
 }
 
 GameManager.prototype.startInteraction = function(connHandler) {
@@ -76,10 +78,16 @@ GameManager.prototype.validateMove = function (data, player) {
 };
 
 GameManager.prototype.notifyEndGame = function (connHandler) {
-  this.gameData.showFinalCost({
+  var finalCost = this.gameData.showFinalCost({
     db: this.db,
     player: this.playerName,
     adversary: this.adversaryName
+  });
+
+  this.ioHandler.send('result', {
+    player: this.playerName,
+    adversary: this.adversaryName,
+    cost: finalCost
   });
 
   this.db.incrementTeamScoreBasedOnMatch(this.playerName, this.adversaryName);
@@ -91,6 +99,10 @@ GameManager.prototype.notifyEndGame = function (connHandler) {
 GameManager.prototype.insertMatch = function (playerName, adversaryName) {
   this.playerName = playerName;
   this.adversaryName = adversaryName;
+
+  if (this.ioHandler) {
+    this.ioHandler.send('match', {player: playerName, adversary: adversaryName})
+  }
   var db = this.db;
   db.insertTeam(playerName);
   db.insertTeam(adversaryName);

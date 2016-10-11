@@ -85,4 +85,5 @@ GameDataManager.prototype.validateMove = function (name, x, y) {
 GameDataManager.prototype.showFinalCost = function (data) {
   console.log(chalk.red("Final cost of", data.player, "is", this.playerBill));
   data.db.finalizeMatch(data.player, data.adversary, this.playerBill);
+  return this.playerBill;
 }

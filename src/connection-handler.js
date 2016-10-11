@@ -17,6 +17,7 @@ function ConnectionHandler() {
     this.driverSock = new DriverConnectionHandler();
     this.timer = new Timer();
     this.db;
+    this.ioHandler;
 };
 
 ConnectionHandler.prototype.handleConnections = function (sock, cb) {
@@ -75,7 +76,6 @@ ConnectionHandler.prototype.startConversation = function(gameManager) {
     if (!self.playerOneTurn) {
       return;
     }
-    console.log(data.toString());
     self.timer.clearPlayerTimeout(1);
 
     var hasEnded = false;
@@ -104,7 +104,6 @@ ConnectionHandler.prototype.startConversation = function(gameManager) {
       return;
     }
 
-    console.log(data.toString());
     self.timer.clearPlayerTimeout(2);
 
     try {
@@ -157,13 +156,15 @@ ConnectionHandler.prototype.reset = function () {
   this.playerOneActive = false;
   this.playerTwoActive = false;
   this.gameActive = false;
-  this.timer.clear();
-  this.timer.playerOneTimer = 0;
-  this.timer.playerTwoName = 0;
+  this.timer.reset();
   this.timer = new Timer();
   console.log('Waiting for player');
   this.driverSock.write('start');
 };
+
+ConnectionHandler.prototype.setIO = function (ioHandler) {
+  this.ioHandler = ioHandler;
+}
 
 ConnectionHandler.prototype.endGameTimeout = function(num) {
   if (num === 1) {
@@ -173,6 +174,15 @@ ConnectionHandler.prototype.endGameTimeout = function(num) {
     console.log(chalk.red(this.playerTwoName, 'timed out'));
     this.db.incrementTeamScore(this.playerOneName);
   }
+
+  if (this.ioHandler) {
+    this.ioHandler.send('result', {
+      player: this.playerOneName,
+      adversary: this.playerTwoName,
+      cost: 0
+    });
+  }
+
 
   this.notifyGameEnd();
   this.reset();

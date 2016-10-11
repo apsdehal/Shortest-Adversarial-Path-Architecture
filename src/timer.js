@@ -8,7 +8,7 @@ function Timer() {
   this.playerTimeout;
   this.playerOneName = 'Player';
   this.playerTwoName = 'Adversary';
-  this.totalTimeAvailable = 10000;
+  this.totalTimeAvailable = 120000;
 }
 
 Timer.prototype.startCounting = function(connHandler, num) {
@@ -50,4 +50,10 @@ Timer.prototype.setPlayerTwoName = function(name) {
 
 Timer.prototype.clear = function() {
   clearTimeout(this.playerTimeout);
+}
+
+Timer.prototype.reset = function() {
+  this.playerOneTimer = 0;
+  this.playerTwoTimer = 0;
+  this.clear();
 }
