@@ -177,9 +177,11 @@ ConnectionHandler.prototype.setIO = function (ioHandler) {
 ConnectionHandler.prototype.endGameTimeout = function(num) {
   if (num === 1) {
     console.log(chalk.red(this.playerOneName, 'timed out'));
+    this.db.finalizeMatch(this.playerOneName, this.playerTwoName, -1);
     this.db.incrementTeamScore(this.playerTwoName);
   } else {
     console.log(chalk.red(this.playerTwoName, 'timed out'));
+    this.db.finalizeMatch(this.playerOneName, this.playerTwoName, -2);
     this.db.incrementTeamScore(this.playerOneName);
   }
 

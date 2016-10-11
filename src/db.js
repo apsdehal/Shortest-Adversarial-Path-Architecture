@@ -1,6 +1,7 @@
 module.exports = DB;
 var fs = require('fs');
 var sqlite = require('sqlite-sync');
+var chalk = require('chalk');
 
 function DB(filename) {
   var file = filename;
@@ -80,10 +81,26 @@ DB.prototype.incrementTeamScoreBasedOnMatch = function(playerName, adversaryName
 
   var winner;
 
-  if (playerAdversaryScoreRow.score === 0) {
+  if (playerAdversaryScoreRow.score === -1) {
     winner = adversaryName;
-  } else if (adversaryPlayerScoreRow.score === 0) {
+    console.log(this.getTeams());
+    console.log(chalk.blue('Winner is', winner));
+    return;
+  } else if (playerAdversaryScoreRow.score === -2) {
     winner = playerName;
+    console.log(this.getTeams());
+    console.log(chalk.blue('Winner is', winner));
+    return;
+  } else if (adversaryPlayerScoreRow.score === -2) {
+    winner = adversaryName;
+    console.log(this.getTeams());
+    console.log(chalk.blue('Winner is', winner));
+    return;
+  } else if (adversaryPlayerScoreRow.score === -1) {
+    winner = playerName;
+    console.log(chalk.blue('Winner is', winner));
+    console.log(this.getTeams());
+    return;
   } else {
     if (playerAdversaryScoreRow.score < adversaryPlayerScoreRow.score) {
       winner = playerName;
@@ -94,8 +111,9 @@ DB.prototype.incrementTeamScoreBasedOnMatch = function(playerName, adversaryName
     }
   }
 
+  console.log(chalk.blue('Winner is', winner));
   this.incrementTeamScore(winner);
-  console.log(this.getTeams(console.log));
+  console.log(this.getTeams());
 }
 
 DB.prototype.getTeams = function (callback) {
