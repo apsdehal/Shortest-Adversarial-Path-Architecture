@@ -18,6 +18,9 @@ describe('File Reader test', function () {
     [ '25', '168', '165', '159', '75', '26', '108', '76' ]);
 
   });
+});
+
+describe('Player One Moves Tests', function () {
 
   it('should properly handle player one moves', function () {
     var fileData = fs.readFileSync('./advshort');
@@ -82,6 +85,9 @@ describe('File Reader test', function () {
 
     assert.strictEqual(gameManager.gameData.playerBill, '4');
   });
+});
+
+describe('Player two moves test', function () {
 
   it('should properly handle player two moves', function () {
     var fileData = fs.readFileSync('./advshort');
@@ -147,4 +153,113 @@ describe('File Reader test', function () {
 
     assert.strictEqual(gameManager.gameData.playerBill, '9671406556917033397649410');
   });
+
+});
+
+describe('Timer tests', function () {
+    it('should timeout correctly for player 1', function (done) {
+      this.timeout(1200);
+      var Timer = require('../src/timer');
+      var timer = new Timer();
+
+      var connHandler = {
+        endGameTimeout: function (num) {
+          done();
+          assert.strictEqual(num, 1);
+        }
+      }
+      timer.totalTimeAvailable = 1000;
+      timer.startCounting(connHandler, 1);
+    });
+
+    it('should take in consideration available time for player 1', function (done) {
+      this.timeout(700);
+
+      var Timer = require('../src/timer');
+      var timer = new Timer();
+
+      timer.playerOneTimer = 500;
+      timer.totalTimeAvailable = 1000;
+
+      var connHandler = {
+        endGameTimeout: function (num) {
+          done();
+          assert.strictEqual(num, 1);
+        }
+      }
+      timer.startCounting(connHandler, 1);
+    });
+
+    it('should timeout correctly for player 2', function (done) {
+      this.timeout(1200);
+      var Timer = require('../src/timer');
+      var timer = new Timer();
+
+      var connHandler = {
+        endGameTimeout: function (num) {
+          done();
+          assert.strictEqual(num, 2);
+        }
+      }
+      timer.totalTimeAvailable = 1000;
+      timer.startCounting(connHandler, 2);
+    });
+
+    it('should take in consideration available time for player 2', function (done) {
+      this.timeout(700);
+
+      var Timer = require('../src/timer');
+      var timer = new Timer();
+
+      timer.playerTwoTimer = 500;
+      timer.totalTimeAvailable = 1000;
+
+      var connHandler = {
+        endGameTimeout: function (num) {
+          done();
+          assert.strictEqual(num, 2);
+        }
+      }
+      timer.startCounting(connHandler, 2);
+    });
+
+    it('should clear properly', function (done) {
+      this.timeout(700);
+
+      var Timer = require('../src/timer');
+      var timer = new Timer();
+
+      var connHandler = {
+        endGameTimeout: function (num) {
+        }
+      }
+
+      timer.startCounting(connHandler, 1);
+      setTimeout(function () {
+        timer.clearPlayerTimeout(1);
+        done();
+        assert.equal(timer.playerOneTimer >= 500, 1);
+      }, 500);
+    });
+
+    it('should clear properly and timeout correctly', function (done) {
+      this.timeout(1600);
+
+      var Timer = require('../src/timer');
+      var timer = new Timer();
+
+      var connHandler = {
+        endGameTimeout: function (num) {
+          done();
+          assert.equal(num, 2);
+        }
+      }
+
+      timer.totalTimeAvailable = 1000;
+      timer.startCounting(connHandler, 1);
+      setTimeout(function () {
+        timer.clearPlayerTimeout(1);
+        timer.startCounting(connHandler, 2);
+      }, 500);
+    });
 });
