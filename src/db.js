@@ -107,6 +107,7 @@ DB.prototype.incrementTeamScoreBasedOnMatch = function(playerName, adversaryName
     } else if (playerAdversaryScoreRow.score > adversaryPlayerScoreRow.score){
       winner = adversaryName;
     } else {
+      console.log(chalk.blue(playerName, 'and', adversaryName, 'are same. So no increase'));
       return;
     }
   }
