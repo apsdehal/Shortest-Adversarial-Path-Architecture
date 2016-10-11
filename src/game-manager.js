@@ -17,6 +17,7 @@ GameManager.prototype.initializeGame = function(data, ioHandler) {
 
 GameManager.prototype.startInteraction = function(connHandler) {
   var self = this;
+  this.gameData.reset();
   connHandler.sendFile(self.gameData.originalData);
 
   connHandler.startConversation(self);

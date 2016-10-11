@@ -151,10 +151,18 @@ ConnectionHandler.prototype.notifyGameEnd = function() {
 }
 
 ConnectionHandler.prototype.reset = function () {
+  if (this.playerOneSock) {
+    this.playerOneSock.end();
+  }
+  if (this.playerTwoSock) {
+    this.playerTwoSock.end();
+  }
   this.playerOneSock = null;
   this.playerTwoSock = null;
   this.playerOneActive = false;
   this.playerTwoActive = false;
+  this.playerOneTurn = false;
+  this.playerTwoTurn = false;
   this.gameActive = false;
   this.timer.reset();
   this.timer = new Timer();

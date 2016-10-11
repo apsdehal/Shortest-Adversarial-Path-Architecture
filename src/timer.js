@@ -9,12 +9,12 @@ function Timer() {
   this.playerTimeout;
   this.playerOneName = 'Player';
   this.playerTwoName = 'Adversary';
-  this.totalTimeAvailable = 120000;
+  this.totalTimeAvailable = 10000;
 }
 
 Timer.prototype.startCounting = function(connHandler, num) {
   this.playerStartTime = Date.now();
-
+  console.log(num);
   var timeAvailable =  this.totalTimeAvailable;
   if (num === 1) {
     timeAvailable -= this.playerOneTimer;
@@ -32,10 +32,13 @@ Timer.prototype.startCounting = function(connHandler, num) {
 Timer.prototype.clearPlayerTimeout = function(num) {
   if (num === 1) {
     this.playerOneTimer += Date.now() - this.playerStartTime;
+    console.log(this.totalTimeAvailable,this.playerOneTimer);
     if (argv.v)
       console.log(chalk.cyan(this.playerOneName, 'has', (this.totalTimeAvailable - this.playerOneTimer) / 1000, 'seconds left'));
   } else if (num === 2) {
     this.playerTwoTimer += Date.now() - this.playerStartTime;
+    console.log(this.totalTimeAvailable,this.playerTwoTimer, this.playerStartTime);
+
     if (argv.v)
       console.log(chalk.yellow(this.playerTwoName, 'has', (this.totalTimeAvailable - this.playerTwoTimer) / 1000, 'seconds left'));
   }
