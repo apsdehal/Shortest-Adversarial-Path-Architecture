@@ -87,12 +87,15 @@ DB.prototype.incrementTeamScoreBasedOnMatch = function(playerName, adversaryName
   } else {
     if (playerAdversaryScoreRow.score < adversaryPlayerScoreRow.score) {
       winner = playerName;
-    } else {
+    } else if (playerAdversaryScoreRow.score > adversaryPlayerScoreRow.score){
       winner = adversaryName;
+    } else {
+      return;
     }
   }
 
-  rhis.incrementTeamScore(winner);
+  this.incrementTeamScore(winner);
+  console.log(this.getTeams(console.log));
 }
 
 DB.prototype.getTeams = function (callback) {

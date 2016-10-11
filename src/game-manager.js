@@ -66,12 +66,12 @@ GameManager.prototype.validateMove = function (data, player) {
   }
 
   if (player === 1) {
-    return this.gameData.validateMove(data)
+    return this.gameData.validateMove(this.playerName, data)
   } else {
     if (data.length !== 2) {
       return false;
     }
-    return this.gameData.validateMove(data[0], data[1]);
+    return this.gameData.validateMove(this.adversaryName, data[0], data[1]);
   }
 };
 
@@ -91,6 +91,7 @@ GameManager.prototype.notifyEndGame = function (connHandler) {
 GameManager.prototype.insertMatch = function (playerName, adversaryName) {
   this.playerName = playerName;
   this.adversaryName = adversaryName;
+  var db = this.db;
   db.insertTeam(playerName);
   db.insertTeam(adversaryName);
   db.insertMatch(playerName, adversaryName);

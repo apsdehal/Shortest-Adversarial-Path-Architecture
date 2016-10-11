@@ -70,13 +70,13 @@ GameDataManager.prototype.reset = function () {
   this.initialize(this.originalData);
 };
 
-GameDataManager.prototype.validateMove = function (x, y) {
+GameDataManager.prototype.validateMove = function (name, x, y) {
   if (!y) {
-    console.log(chalk.green('Player wants to move to', x));
+    console.log(chalk.green(name, 'wants to move to', x));
     y = x;
     x = this.playerOnePosition;
   } else {
-    console.log(chalk.green('Adversary has doubled', x, y));
+    console.log(chalk.green(name, 'has doubled', x, y));
   }
 
   return this.graph.validEdge(x, y);
