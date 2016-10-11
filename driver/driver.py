@@ -10,10 +10,13 @@ file = open(fileName, 'r')
 teams = [x.strip() for x in file.readlines()]
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
-def killProcs(proc1,proc2):
-	proc1.kill()
-	proc2.kill()
-	print "Terminated. Code took too long to run"
+proc1 = -1
+proc2 = -1
+
+def killProcs(mProc1,mProc2):
+	mProc1.kill()
+	mProc2.kill()
+	#print "Terminated. Code took too long to run"
 
 HOST = 'localhost'    # The remote host
 PORT = 5001
@@ -26,6 +29,8 @@ for i in range(0,len(teams)-1):
 			data = s.recv(1024)
 			if data == 'start':
 				break
+		if(proc1 != -1 and proc2 != -1):
+			killProcs(proc1,proc2)
 		team1 = teams[i]
 		team2 = teams[j]
 		#run team1 as player and team2 as adversary
@@ -48,18 +53,19 @@ for i in range(0,len(teams)-1):
 			adversary = adversary + ".sh"
 		proc2 = subprocess.Popen("exec " + adversary, shell = True)
 		os.chdir(dir_path)
-		timer = threading.Timer(240, killProcs, [proc1,proc2])
-		timer.start()
-		proc1.communicate()
-		proc2.communicate()
+		#timer = threading.Timer(240, killProcs, [proc1,proc2])
+		#timer.start()
+		#proc1.communicate()
+		#proc2.communicate()
 		#print "killed the thread"
-		timer.cancel()
+		#timer.cancel()
 
 		#waiting for server to give command
 		while 1:
 			data = s.recv(1024)
 			if data == 'start':
 				break
+		killProcs(proc1,proc2)
 
 		#run team2 as player and team1 as adversary
 		player = "./" + team2 + "_player"
@@ -79,10 +85,10 @@ for i in range(0,len(teams)-1):
 			adversary = adversary + ".sh"
 		proc2 = subprocess.Popen("exec " + adversary, shell = True)
 		os.chdir(dir_path)
-		timer = threading.Timer(240.0, killProcs,[proc1,proc2])
-		timer.start()
-		proc1.communicate()
-		proc2.communicate()
+		#timer = threading.Timer(240.0, killProcs,[proc1,proc2])
+		#timer.start()
+		#proc1.communicate()
+		#proc2.communicate()
 		#print "killed the thread"
-		timer.cancel()
+		#timer.cancel()
 s.close()
