@@ -50,7 +50,7 @@ for i in range(0,len(teams)-1):
 		timer.start()
 		proc1.communicate()
 		proc2.communicate()
-		print "killed the thread"
+		#print "killed the thread"
 		timer.cancel()
 
 		#waiting for server to give command
@@ -81,6 +81,6 @@ for i in range(0,len(teams)-1):
 		timer.start()
 		proc1.communicate()
 		proc2.communicate()
-		print "killed the thread"
+		#print "killed the thread"
 		timer.cancel()
 s.close()
