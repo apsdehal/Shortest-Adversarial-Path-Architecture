@@ -35,6 +35,8 @@ for i in range(0,len(teams)-1):
 		#sending data to server
 		s.send(team1 + " " + team2)
 
+		print "Running " + team1 + " " + team2
+
 		if(not os.path.isfile(player)):
 			player = player + ".sh"
 		os.chdir(dir_path + "/" + team1)
