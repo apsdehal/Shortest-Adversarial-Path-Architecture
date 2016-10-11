@@ -1,5 +1,6 @@
 var fs = require('fs');
 var assert = require('assert');
+var dbTests = require('./db-tests');
 
 describe('File Reader test', function () {
   it('should parse and return correctly formatted data', function () {
@@ -156,6 +157,8 @@ describe('Player two moves test', function () {
 
 });
 
+dbTests();
+
 describe('Timer tests', function () {
     it('should timeout correctly for player 1', function (done) {
       this.timeout(1200);
@@ -164,8 +167,8 @@ describe('Timer tests', function () {
 
       var connHandler = {
         endGameTimeout: function (num) {
-          done();
           assert.strictEqual(num, 1);
+          done();
         }
       }
       timer.totalTimeAvailable = 1000;
@@ -183,8 +186,8 @@ describe('Timer tests', function () {
 
       var connHandler = {
         endGameTimeout: function (num) {
-          done();
           assert.strictEqual(num, 1);
+          done();
         }
       }
       timer.startCounting(connHandler, 1);
@@ -197,8 +200,8 @@ describe('Timer tests', function () {
 
       var connHandler = {
         endGameTimeout: function (num) {
-          done();
           assert.strictEqual(num, 2);
+          done();
         }
       }
       timer.totalTimeAvailable = 1000;
@@ -250,8 +253,8 @@ describe('Timer tests', function () {
 
       var connHandler = {
         endGameTimeout: function (num) {
-          done();
           assert.equal(num, 2);
+          done();
         }
       }
 
