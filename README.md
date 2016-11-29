@@ -1,8 +1,8 @@
-# Shortest Adversial Path - Architecture
+# Shortest Adversarial Path - Architecture
 
-[![Build Status](https://travis-ci.org/apsdehal/Shortest-Adversial-Path-Architecture.svg?branch=master)](https://travis-ci.org/apsdehal/Shortest-Adversial-Path-Architecture)
+[![Build Status](https://travis-ci.org/apsdehal/Shortest-Adversarial-Path-Architecture.svg?branch=master)](https://travis-ci.org/apsdehal/Shortest-Adversarial-Path-Architecture)
 
-Application architecture created for [Heuristics Problem Solving](http://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/) course at NYU. This architecture is specifically for the problem Shortest Adversial Path.
+Application architecture created for [Heuristics Problem Solving](http://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/) course at NYU. This architecture is specifically for the problem Shortest Adversarial Path.
 
 ## Problem Description
 
